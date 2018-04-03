@@ -21,6 +21,7 @@ public class SqlHelper
     {
         //数据库连接对象实例化
         conn = new SqlConnection(connString);
+        Connect();
     }
 
     //析构函数
