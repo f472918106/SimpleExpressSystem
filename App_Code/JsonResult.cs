@@ -8,7 +8,7 @@ using System.Web;
 /// </summary>
 public class JsonResult
 {
-    public string Code { get; set; }
+    public int Code { get; set; }
     public string Message { get; set; }
     public List<object> Data { get; set; }
     public JsonResult()

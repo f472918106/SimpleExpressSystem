@@ -39,7 +39,7 @@ public class SqlHelper
     }
 
     //关闭数据库连接
-    private void DisConnect()
+    public void DisConnect()
     {
         if (conn.State == ConnectionState.Open)
         {
@@ -55,7 +55,8 @@ public class SqlHelper
             Connect();
         }
         SqlCommand cmd = new SqlCommand(sqlStr, conn);
-        cmd.Parameters.AddRange(parameters);
+        if(parameters!=null)
+            cmd.Parameters.AddRange(parameters);
         SqlDataAdapter adp = new SqlDataAdapter(cmd);
         DataTable dt = new DataTable();
         adp.Fill(dt);
