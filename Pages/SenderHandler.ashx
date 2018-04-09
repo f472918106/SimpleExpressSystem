@@ -52,6 +52,7 @@ public class SenderHandler : IHttpHandler {
             JavaScriptSerializer js = new JavaScriptSerializer();
             // 将result对象转换为json字符串
             string json = js.Serialize(result);
+            context.Response.ContentType = "text/json";
             context.Response.Write(json);
         }
         catch(Exception e)

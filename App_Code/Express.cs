@@ -9,7 +9,7 @@ using System.Web;
 public class Express
 {
     public string Id { get; set; }
-    public string Code { get; set; }
+    public string Code { get; set; }//Express_Code
     public string Student_Code { get; set; }
     public string Student_Name { get; set; }
     public string Student_Id { get; set; }

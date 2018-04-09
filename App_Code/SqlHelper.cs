@@ -55,7 +55,7 @@ public class SqlHelper
             Connect();
         }
         SqlCommand cmd = new SqlCommand(sqlStr, conn);
-        if(parameters!=null)
+        if(parameters!=null)//判断一下parameters是否为空,不判断会出错
             cmd.Parameters.AddRange(parameters);
         SqlDataAdapter adp = new SqlDataAdapter(cmd);
         DataTable dt = new DataTable();
