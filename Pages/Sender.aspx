@@ -16,43 +16,46 @@
                 success: function (json) {
                     if(json.Code == 0)
                     {
-                        var s = "";
+                        var s = "<table style='width:100%' border='1'>";
+                        s += "<tr><td>快递单号</td><td>收件人</td><td>楼号</td><td>宿舍号</td><td>派送时间</td><td>接收时间</td><td>快递状态</td><td>操作</td><tr>";
                         for(var i=0;i<json.Data.length;i++)
                         {
-                            s += json.Data[i].Code + " ";
-                            s += json.Data[i].Student_Name + " ";
-                            s += json.Data[i].Building_Name + " ";
-                            s += json.Data[i].Dorm_Name + " ";
+                            s += "<tr>";
+                            s += "<td>"+json.Data[i].Code + "</td>";
+                            s += "<td>"+json.Data[i].Student_Name + "</td>";
+                            s += "<td>" + json.Data[i].Building_Name + "</td>";
+                            s += "<td>" + json.Data[i].Dorm_Name + "</td>";
 
                             if(json.Data[i].DelegateTime==null)
                             {
-                                s += "未知 ";
+                                s += "<td>未知</td>";
                             }
                             else
                             {
-                                s += json.Data[i].DelegateTime+" ";
+                                s += "<td>" + json.Data[i].DelegateTime + "</td>";
                             }
 
                             if (json.Data[i].ReceiveTime == null) {
-                                s += "未知 ";
+                                s += "<td>未知</td>";
                             }
                             else {
-                                s += json.Data[i].ReceiveTime + " ";
+                                s += "<td>" + json.Data[i].ReceiveTime + "</td>";
                             }
 
                             if(json.Data[i].Status==0)
                             {
-                                s += "待投递 ";
+                                s += "<td>待投递</td>";
                             }
                             else if(json.Data[i].Status==1)
                             {
-                                s += "已签收 ";
+                                s += "<td>已签收</td>";
                             }
                             else
                             {
-                                s += "已完成 ";
+                                s += "<td>已完成</td>";
                             }
-                            s += "<br>";
+                            s += "<td><input type='button' value='完成' onclick='onclickfinish(\""+json.Data[i].Id+"\");'></td>";
+                            s += "</tr>";
                         }
                         $("#expressList").html(s);
                     }
@@ -63,7 +66,18 @@
                 }
             })
         });
+        
+        function onclickfinish(id)
+        {
+            $.ajax({
+                url: "UpdateExpressStatus.ashx",
+                type: "post",
+                data: {"id":id,"status":2}, //属性名id和status可以用双引号包起来
+                success: function (response) {
 
+                }
+            });
+        }
     </script>
 </head>
 <body>
