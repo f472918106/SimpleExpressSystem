@@ -6,21 +6,25 @@ using System.Data;
 using System.Data.Sql;
 using System.Data.SqlClient;
 using System.Web.Script.Serialization;
+using System.Web.SessionState;
 
-public class SenderHandler : IHttpHandler {
+public class SenderHandler : IHttpHandler,IRequiresSessionState {
 
     public void ProcessRequest (HttpContext context) {
         SqlHelper helper = null;
         try
         {
             helper = new SqlHelper();
+            string accountId = (String)context.Session["accountId"];
             string sql = "select e.id,e.code,s.code as student_code, "+
                 "s.name,s.id as student_id,b.building_name, "+
                 "d.dorm_name, e.delegate_time,e.receive_time,e.status "+
                 "from express e "+
                 "inner join student s on e.student_id=s.id "+
                 "inner join dorm d on e.dorm_id=d.id "+
-                "inner join building b on d.building_id=b.id";
+                "inner join building b on d.building_id=b.id "+
+                "inner join sender r on e.sender_id=r.id "+
+                "where r.account_id='"+accountId+"'";
             DataTable dt = helper.Query(sql, null);
             JsonResult result = new JsonResult();
             result.Code = 0;
@@ -62,11 +66,15 @@ public class SenderHandler : IHttpHandler {
             result.Message = e.Message;
             JavaScriptSerializer js = new JavaScriptSerializer();
             string json = js.Serialize(result);
+            context.Response.ContentType = "text/json";
             context.Response.Write(json);
         }
         finally
         {
-            helper.DisConnect();
+            if(helper!=null)
+            {
+                helper.DisConnect();
+            }
         }
     }
 

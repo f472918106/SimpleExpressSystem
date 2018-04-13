@@ -5,9 +5,10 @@ using System.Web;
 using System.Data.Sql;  //访问sqlserver必加
 using System.Data;  //访问sqlserver必加
 using System.Data.SqlClient;    //访问sqlserver必加
+using System.Web.SessionState;
 
-public class LoginHandler : IHttpHandler {
-    
+public class LoginHandler : IHttpHandler,IRequiresSessionState {
+    //IRequiresSessionState和using System.Web.SessionState为了让context.Session["accountId"]=accountId起作用
     public void ProcessRequest (HttpContext context) {
         string username = context.Request["username"];
         //获取请求中指定name对应的html元素的value
@@ -24,6 +25,8 @@ public class LoginHandler : IHttpHandler {
             if(dt.Rows.Count>0)
             {
                 string role_id = dt.Rows[0]["role_id"].ToString();
+                string accountId = dt.Rows[0]["id"].ToString();
+                context.Session["accountId"]=accountId;
                 //获取查询结果第1行 role_id列的值
                 if(role_id=="2")
                 {
@@ -60,7 +63,7 @@ public class LoginHandler : IHttpHandler {
 
         }
     }
- 
+
     public bool IsReusable {
         get {
             return false;
