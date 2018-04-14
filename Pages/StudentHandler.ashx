@@ -8,10 +8,10 @@ using System.Data.SqlClient;
 using System.Web.Script.Serialization;
 using System.Web.SessionState;
 
-public class StudentHandler : IHttpHandler {
+public class StudentHandler : IHttpHandler,IRequiresSessionState{
 
     public void ProcessRequest (HttpContext context) {
-        SqlHelper helper = null;
+       SqlHelper helper = null;
         try
         {
             helper = new SqlHelper();
@@ -62,7 +62,7 @@ public class StudentHandler : IHttpHandler {
         catch(Exception e)
         {
             JsonResult result = new JsonResult();
-            result.Code = 0;
+            result.Code = 0;//0成功，1失败 
             result.Message = e.Message;
             JavaScriptSerializer js = new JavaScriptSerializer();
             string json = js.Serialize(result);
