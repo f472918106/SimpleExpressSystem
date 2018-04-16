@@ -32,7 +32,7 @@ public class StudentHandler : IHttpHandler,IRequiresSessionState{
             {
                 Express express = new Express();
                 express.Id = dr["id"].ToString();
-                express.Code = dr["code"].ToString();
+                express.Express_Code = dr["code"].ToString();
                 express.Student_Code = dr["student_code"].ToString();
                 express.Student_Name = dr["name"].ToString();
                 express.Student_Id = dr["student_id"].ToString();
@@ -62,7 +62,7 @@ public class StudentHandler : IHttpHandler,IRequiresSessionState{
         catch(Exception e)
         {
             JsonResult result = new JsonResult();
-            result.Code = 0;//0成功，1失败 
+            result.Code = 1;//0成功，1失败 
             result.Message = e.Message;
             JavaScriptSerializer js = new JavaScriptSerializer();
             string json = js.Serialize(result);
