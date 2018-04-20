@@ -22,6 +22,7 @@
                             s += "<option value='"+response.Data[i].Id+"'>"+response.Data[i].BuildingName+"</option>";
                         }
                         $("#BuildingId").html(s);
+                        LoadDorms();
                     }
                     else
                     {
@@ -30,8 +31,95 @@
                 }
             });
         }
+
+        function LoadSender() {
+            $.ajax({
+                url: "GetSender.ashx",
+                type: "POST",
+                dataType: "json",
+                success: function (response) {
+                    if (response.Code == 0) {
+                        var s = "";
+                        for (var i = 0; i < response.Data.length; i++) {
+                            s += "<option value='" + response.Data[i].Id + "'>" + response.Data[i].SenderName + "</option>";
+                        }
+                        $("#SenderId").html(s);
+                    }
+                    else {
+                        alert(response.Message);
+                    }
+                }
+            });
+        }
+
+        function LoadDorms() {
+            //级联，列出指定宿舍楼全部宿舍
+            var buildingId = $("#BuildingId").val();
+            if(buildingId==null||buildingId=="")
+            {
+                alert("宿舍楼号为空");
+                return;
+            }
+            $.ajax({
+                url: "GetDorm.ashx",
+                type: "POST",
+                dataType: "json",
+                data: {"buildingId":buildingId},
+                success: function (response) {
+                    if (response.Code == 0) {
+                        var s = "";
+                        for (var i = 0; i < response.Data.length; i++) {
+                            s += "<option value='" + response.Data[i].Id + "'>" + response.Data[i].DormName + "</option>";
+                        }
+                        $("#DormId").html(s);
+                        LoadStudents();
+                    }
+                    else {
+                        alert(response.Message);
+                    }
+                }
+            });
+        }
+
+        function LoadStudents() {
+            var dormId = $("#DormId").val();
+            if(dormId==null||dormId=="")
+            {
+                alert("宿舍号为空");
+                return;
+            }
+            $.ajax({
+                url: "GetStudent.ashx",
+                type: "POST",
+                dataType: "json",
+                data: { "dormId": dormId },
+                success: function (response) {
+                    if (response.Code == 0) {
+                        var s = "";
+                        for (var i = 0; i < response.Data.length; i++) {
+                            s += "<option value='" + response.Data[i].Id + "'>" + response.Data[i].StudentName + "</option>";
+                        }
+                        $("#StudentId").html(s);
+                    }
+                    else
+                    {
+                        alert(response.Message);
+                    }
+                }
+            });
+        }
+
+        function OnBuildingChanged() {
+            LoadDorms();
+        }
+
+        function OnDormChanged() {
+            LoadStudents();
+        }
+
         $(function () {
             LoadBuildings();
+            LoadSender();
         });
     </script>
 </head>
@@ -45,10 +133,10 @@
             名称<input style="width:150px" type="text" id="ExpressTitle" name="ExpressTitle" value="" />
         </p>
         <p>
-            楼号<select style="width:150px" id="BuildingId" name="BuildingId"></select>
+            楼号<select style="width:150px" id="BuildingId" name="BuildingId" onchange="OnBuildingChanged();"></select>
         </p>
         <p>
-            宿舍号<select style="width:150px" id="DormId" name="DormId"></select>
+            宿舍号<select style="width:150px" id="DormId" name="DormId" onchange="OnDormChanged();"></select>
         </p>
         <p>
             收件人<select style="width:150px" id="StudentId" name="StudentId"></select>
