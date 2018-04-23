@@ -27,7 +27,7 @@
                         s += "<tr><td>快递单号</td><td>收件人</td><td>楼号</td><td>宿舍号</td><td>派送时间</td><td>接收时间</td><td>快递状态</td><td>操作</td><tr>";
                         for (var i = 0; i < json.Data.length; i++) {
                             s += "<tr>";
-                            s += "<td>" + json.Data[i].Code + "</td>";
+                            s += "<td>" + json.Data[i].Express_Code + "</td>";
                             s += "<td>" + json.Data[i].Student_Name + "</td>";
                             s += "<td>" + json.Data[i].Building_Name + "</td>";
                             s += "<td>" + json.Data[i].Dorm_Name + "</td>";
@@ -63,7 +63,7 @@
                             else {
                                 s += "<td>已完成</td>";
                             }
-                            s += "<td><input type='button' value='完成' onclick='onclickfinish(\"" + json.Data[i].Id + "\");'></td>";
+                            s += "<td><input type='button' value='签收' onclick='onclickfinish(\"" + json.Data[i].Id + "\");'></td>";
                             s += "</tr>";
                         }
                         $("#expressList").html(s);
@@ -87,7 +87,7 @@
                         for(var i=0;i<json.Data.length;i++)
                         {
                             s += "<tr>";
-                            s += "<td>"+json.Data[i].Code + "</td>";
+                            s += "<td>"+json.Data[i].Express_Code + "</td>";
                             s += "<td>"+json.Data[i].Student_Name + "</td>";
                             s += "<td>" + json.Data[i].Building_Name + "</td>";
                             s += "<td>" + json.Data[i].Dorm_Name + "</td>";
@@ -128,7 +128,7 @@
                             {
                                 s += "<td>已完成</td>";
                             }
-                            s += "<td><input type='button' value='完成' onclick='onclickfinish(\""+json.Data[i].Id+"\");'></td>";
+                            s += "<td><input type='button' value='签收' onclick='onclickfinish(\""+json.Data[i].Id+"\");'></td>";
                             s += "</tr>";
                         }
                         $("#expressList").html(s);

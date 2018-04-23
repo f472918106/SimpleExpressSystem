@@ -124,7 +124,7 @@
     </script>
 </head>
 <body>
-    <form id="form1">
+    <form id="form1" action="SaveExpress.ashx" method="post">
     <div>
         <p>
             编号<input style="width:150px" type="text" id="ExpressCode" name="ExpressCode" value="" />
