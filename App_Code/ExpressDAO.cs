@@ -9,6 +9,9 @@ using System.Data.SqlClient;
 /// <summary>
 /// ExpressDAO 的摘要说明
 /// </summary>
+
+/*
+
 public class ExpressDAO
 {
     /// <summary>
@@ -114,3 +117,5 @@ public class ExpressDAO
         //转换格式
     }
 }
+
+*/
