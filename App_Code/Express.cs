@@ -15,9 +15,12 @@ public class Express
     public string Student_Name { get; set; }
     public string Student_Id { get; set; }
     public string Building_Name { get; set; }
+    public string Dorm_Id { get; set; }
     public string Dorm_Name { get; set; }
     public DateTime? ReceiveTime { get; set; }
     public DateTime? DelegateTime { get; set; }
+    public string Sender_Id { get; set; }
+    public string Sender_Name { get; set; }
     public int Status { get; set; }
     public Express()
     {

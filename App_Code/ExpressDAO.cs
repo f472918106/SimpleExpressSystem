@@ -9,13 +9,10 @@ using System.Data.SqlClient;
 /// <summary>
 /// ExpressDAO 的摘要说明
 /// </summary>
-
-/*
-
 public class ExpressDAO
 {
     /// <summary>
-    /// 数据访问层定义
+    /// 数据访问层
     /// 封装对express表的实际数据库操作
     /// 提供更简洁的对外接口
     /// </summary>
@@ -26,7 +23,7 @@ public class ExpressDAO
         //
     }
 
-    public List<Express> FindExpress(string condition)
+    public List<Express> Find(string condition)
     {
         //根据指定条件，找到对应Express
         //condition为查询条件
@@ -36,7 +33,8 @@ public class ExpressDAO
             helper = new SqlHelper();
             string sql = "select e.id,e.code,s.code as student_code, " +
                 "s.name,s.id as student_id,b.building_name, " +
-                "d.dorm_name, e.delegate_time,e.receive_time,e.status " +
+                "d.dorm_name, e.delegate_time,e.receive_time,e.status, " +
+                "dorm_id,sender_id "+
                 "from express e " +
                 "inner join student s on e.student_id=s.id " +
                 "inner join dorm d on e.dorm_id=d.id " +
@@ -95,11 +93,46 @@ public class ExpressDAO
     public Express FindOne(string id)
     {
         //根据指定id，找到对应Express
+        List<Express> data = Find("id='" + id + "'");
+        if(data == null || data.Count == 0)
+        {
+            return null;
+        }
+        return data[0];
     }
 
     public void Insert(Express express)
     {
         //插入快递信息
+        SqlHelper helper = null;
+        try
+        {
+            helper = new SqlHelper();
+
+            string sql = "insert into express (id,code,title,dorm_id,student_id,sender_id,delegate_time,status)" +
+                " values(@id,@code,@title,@dorm_id,@student_id,@sender_id,@delegate_time,0)";
+
+            SqlParameter[] p = new SqlParameter[7];
+            p[0] = new SqlParameter("@id", Guid.NewGuid().ToString());
+            p[1] = new SqlParameter("@code", express.Express_Code);
+            p[2] = new SqlParameter("@title", express.Express_Title);
+            p[3] = new SqlParameter("@dorm_id", express.Dorm_Id);
+            p[4] = new SqlParameter("@student_id", express.Student_Id);
+            p[5] = new SqlParameter("@sender_id", express.Sender_Id);
+            p[6] = new SqlParameter("@delegate_time", DateTime.Now);
+            helper.Save(sql, p);
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
+        finally
+        {
+            if (helper != null)
+            {
+                helper.DisConnect();
+            }
+        }
     }
 
     public void Update(Express express)
@@ -115,7 +148,28 @@ public class ExpressDAO
     private Express ToExpress(DataRow dr)
     {
         //转换格式
+        Express express = new Express();
+        express.Id = dr["id"].ToString();
+        express.Express_Code = dr["code"].ToString();
+        express.Student_Code = dr["student_code"].ToString();
+        express.Student_Name = dr["name"].ToString();
+        express.Student_Id = dr["student_id"].ToString();
+        express.Building_Name = dr["building_name"].ToString();
+        express.Dorm_Name = dr["dorm_name"].ToString();
+        express.Sender_Id = dr["sender_id"].ToString();
+        express.Dorm_Id = dr["dorm_id"].ToString();
+
+        if (dr["delegate_time"] == DBNull.Value)
+            express.DelegateTime = null;
+        else
+            express.DelegateTime = DateTime.Parse(dr["delegate_time"].ToString());
+
+        if (dr["receive_time"] == DBNull.Value)
+            express.ReceiveTime = null;
+        else
+            express.ReceiveTime = DateTime.Parse(dr["receive_time"].ToString());
+
+        express.Status = int.Parse(dr["status"].ToString());
+        return express;
     }
 }
-
-*/
