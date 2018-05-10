@@ -2,6 +2,7 @@
 
 using System;
 using System.Web;
+using System.Collections.Generic;
 
 public class SaveExpress : IHttpHandler {
 
@@ -10,7 +11,10 @@ public class SaveExpress : IHttpHandler {
         {
             Express express = new Express();
             ExpressService expressservice = new ExpressService();
+            Express _express = new Express();
             express.Express_Code = context.Request["ExpressCode"];
+            _express = expressservice.FindExpressByCode(express.Express_Code);
+            express.Id = _express.Id;
             express.Express_Title = context.Request["ExpressTitle"];
             express.Student_Id= context.Request["StudentId"];
             express.Sender_Id = context.Request["SenderId"];

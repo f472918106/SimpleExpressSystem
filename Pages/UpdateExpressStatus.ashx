@@ -30,6 +30,9 @@ public class UpdateExpressStatus : IHttpHandler {
         }
     }
 
+    /// <summary>
+    /// 作业： 补全，调试get和insert，写update，
+    /// </summary>
     public bool IsReusable {
         get {
             return false;

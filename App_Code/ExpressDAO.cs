@@ -34,7 +34,7 @@ public class ExpressDAO
             string sql = "select e.id,e.code,s.code as student_code, " +
                 "s.name,s.id as student_id,b.building_name, " +
                 "d.dorm_name, e.delegate_time,e.receive_time,e.status, " +
-                "dorm_id,sender_id "+
+                "e.dorm_id,e.sender_id "+
                 "from express e " +
                 "inner join student s on e.student_id=s.id " +
                 "inner join dorm d on e.dorm_id=d.id " +
@@ -57,7 +57,7 @@ public class ExpressDAO
                 express.Express_Code = dr["code"].ToString();
                 express.Student_Code = dr["student_code"].ToString();
                 express.Student_Name = dr["name"].ToString();
-                express.Student_Id = dr["student_id"].ToString();
+                //express.Student_Id = dr["student_id"].ToString();
                 express.Building_Name = dr["building_name"].ToString();
                 express.Dorm_Name = dr["dorm_name"].ToString();
 
@@ -93,8 +93,19 @@ public class ExpressDAO
     public Express FindOne(string id)
     {
         //根据指定id，找到对应Express
-        List<Express> data = Find("id='" + id + "'");
+        List<Express> data = Find(" e.id='" + id + "'");
         if(data == null || data.Count == 0)
+        {
+            return null;
+        }
+        return data[0];
+    }
+
+    public Express FindByCode(string code)
+    {
+        //根据指定code，找到对应的Express
+        List<Express> data = Find(" e.code='" + code + "'");
+        if(data ==null || data.Count==0)
         {
             return null;
         }
@@ -138,11 +149,84 @@ public class ExpressDAO
     public void Update(Express express)
     {
         //更新快递信息
+        SqlHelper helper = null;
+        try
+        {
+            helper = new SqlHelper();
+            string sql = "update express set";
+
+            List<SqlParameter> list=new List<SqlParameter>();
+            if(!string.IsNullOrEmpty(express.Express_Title))
+            {
+                sql += " title=@title,";
+                list.Add(new SqlParameter("@title", express.Express_Title));
+            }
+            if(!string.IsNullOrEmpty(express.Dorm_Id))
+            {
+                sql += " dorm_id=@dorm_id,";
+                list.Add(new SqlParameter("@dorm_id", express.Dorm_Id));
+            }
+            if(!string.IsNullOrEmpty(express.Student_Id))
+            {
+                sql += " student_id=@student_id,";
+                list.Add(new SqlParameter("@student_id", express.Student_Id));
+            }
+            if(!string.IsNullOrEmpty(express.Sender_Id))
+            {
+                sql += " sender_id=@sender_id,";
+                list.Add(new SqlParameter("@sender_id", express.Sender_Id));
+            }
+
+            if(!string.IsNullOrEmpty(express.Status.ToString()))
+            {
+                sql += " status=@status,";
+                list.Add(new SqlParameter("@status", express.Status));
+            }
+
+            sql = sql.Substring(0, sql.Length - 1);
+
+            SqlParameter[] p = list.ToArray();
+            if(!string.IsNullOrEmpty(express.Express_Code))
+            {
+                sql += " where id='" + express.Id + "'";
+            }
+
+            helper.Save(sql, p);
+        }
+        catch(Exception e)
+        {
+            throw e;
+        }
+        finally
+        {
+            if(helper!=null)
+            {
+                helper.DisConnect();
+            }
+        }
     }
 
     public void Delete(string id)
     {
         //删除快递信息
+        SqlHelper helper = null;
+        try
+        {
+            helper = new SqlHelper();
+            string sql = "delete from express where code='" + id + "'";
+            helper.Delete(sql);
+        }
+        catch(Exception e)
+        {
+            throw e;
+        }
+        finally
+        {
+            if(helper!=null)
+            {
+                helper.DisConnect();
+            }
+        }
     }
 
     private Express ToExpress(DataRow dr)

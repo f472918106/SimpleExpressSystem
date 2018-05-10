@@ -75,4 +75,14 @@ public class SqlHelper
         cmd.ExecuteNonQuery();
     }
 
+    //删除操作
+    public void Delete(string sqlStr)
+    {
+        if(conn.State!=ConnectionState.Open)
+        {
+            Connect();
+        }
+        SqlCommand cmd = new SqlCommand(sqlStr, conn);
+        cmd.ExecuteNonQuery();
+    }
 }

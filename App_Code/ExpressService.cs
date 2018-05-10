@@ -27,6 +27,11 @@ public class ExpressService
         return expressDAO.FindOne(id);
     }
 
+    public Express FindExpressByCode(string code)
+    {
+        return expressDAO.FindByCode(code);
+    }
+
     public void SaveExpress(Express express)
     {
         if(string.IsNullOrEmpty(express.Id))
@@ -36,6 +41,14 @@ public class ExpressService
         else
         {
             expressDAO.Update(express);
+        }
+    }
+
+    public void DeleteExpress(string id)
+    {
+        if(string.IsNullOrEmpty(id))
+        {
+            expressDAO.Delete(id);
         }
     }
 }
