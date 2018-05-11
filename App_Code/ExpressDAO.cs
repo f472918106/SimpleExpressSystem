@@ -31,7 +31,7 @@ public class ExpressDAO
         try
         {
             helper = new SqlHelper();
-            string sql = "select e.id,e.code,s.code as student_code, " +
+            string sql = "select e.id,e.code,e.title,s.code as student_code, " +
                 "s.name,s.id as student_id,b.building_name, " +
                 "d.dorm_name, e.delegate_time,e.receive_time,e.status, " +
                 "e.dorm_id,e.sender_id "+
@@ -57,7 +57,7 @@ public class ExpressDAO
                 express.Express_Code = dr["code"].ToString();
                 express.Student_Code = dr["student_code"].ToString();
                 express.Student_Name = dr["name"].ToString();
-                //express.Student_Id = dr["student_id"].ToString();
+                express.Express_Title = dr["title"].ToString();
                 express.Building_Name = dr["building_name"].ToString();
                 express.Dorm_Name = dr["dorm_name"].ToString();
 
